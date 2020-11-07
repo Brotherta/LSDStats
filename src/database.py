@@ -30,12 +30,9 @@ def insertAuthorInTable(message):
             print("Error %d: %s" % (e.args[0], e.args[1]))
         
         sql = "INSERT INTO `messages` (`UserID`, `message`,`Channel`, `time`) VALUES (%s, %s, %s, %s)"
-        try:
-            connection.cursor().execute(sql, (userID, content, channelID, time))
-            connection.commit()
-        except Exception as e:
-            print(e)
-        
+        connection.cursor().execute(sql, (userID, content, channelID, time))
+        connection.commit()
         connection.close()
-    except:
-        print("Connection db failed.")
+
+    except Exception as e:
+        print(e)
