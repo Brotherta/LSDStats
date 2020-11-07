@@ -26,7 +26,7 @@ async def on_message(message):
     user = message.author
 
     if not message.content.startswith('s!') and  str(user.id) in ac.YesList:  
-        await db.insertAuthorInTable(message)
+        db.insertAuthorInTable(message)
 
     elif message.content.startswith('s!salut'):
         if user.id == 585123574487187476:
