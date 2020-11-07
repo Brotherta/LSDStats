@@ -5,7 +5,6 @@ import pymysql.cursors
 
 from dotenv import load_dotenv
 
-
 load_dotenv()
 HOST = os.getenv('MyHOST')
 DB = os.getenv('DATABASE')
@@ -19,6 +18,7 @@ def insertAuthorInTable(message):
     channel = message.channel
     time = message.created_at
     channelStr = "{}".format(channel)
+
     try:
         try :
             connection = pymysql.connect(host=HOST,

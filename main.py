@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 import src.settings as s
 import src.database as db
+import src.acceptingCollect as ac
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -24,7 +25,7 @@ async def on_message(message):
     #print(message.author.id)
     user = message.author
 
-    if not message.content.startswith('s!'):
+    if not message.content.startswith('s!') and  str(user.id) in ac.YesList:  
         db.insertAuthorInTable(message)
 
     elif message.content.startswith('s!salut'):
@@ -32,7 +33,6 @@ async def on_message(message):
             await message.channel.send("Bonjour {} trou d'balle.".format(user))
         else:
             await message.channel.send("Bonjour <@{}>.".format(user.id))
-
 
 
 # utf 8
