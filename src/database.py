@@ -15,9 +15,8 @@ def insertAuthorInTable(message):
     user = message.author
     userID = user.id
     content = message.content
-    channel = message.channel
+    channelID = message.channel.id
     time = message.created_at
-    channelStr = "{}".format(channel)
 
     try:
         try :
@@ -32,7 +31,7 @@ def insertAuthorInTable(message):
         
         sql = "INSERT INTO `messages` (`UserID`, `message`,`Channel`, `time`) VALUES (%s, %s, %s, %s)"
         try:
-            connection.cursor().execute(sql, (userID, content, channelStr, time))
+            connection.cursor().execute(sql, (userID, content, channelID, time))
             connection.commit()
         except Exception as e:
             print(e)
