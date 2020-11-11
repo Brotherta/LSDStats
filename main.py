@@ -1,16 +1,15 @@
 # bot.py
 import os
-
-import os
-
 import discord
+
 from discord.ext import commands
 from dotenv import load_dotenv
+
 import pymysql.cursors
 
-import src.settings as s
+import data.settings
 import src.database as db
-import src.acceptingCollect as ac
+import data.acceptingCollect as ac
 import logging
 
 load_dotenv()
@@ -19,6 +18,7 @@ HOST = os.getenv('MyHOST')
 DB = os.getenv('DATABASE')
 USER = os.getenv('MyUSER')
 PWD = os.getenv('MyPWD')
+
 
 logger = logging.getLogger('LSDStats')
 logger.setLevel(logging.DEBUG)
@@ -35,7 +35,7 @@ logger.addHandler(handler)
 
 
 class LSDBot(commands.AutoShardedBot):
-
+    
     def __init__(self):
         super().__init__(command_prefix="s!") #help_command=_default
         self._load_extensions()
@@ -62,24 +62,15 @@ class LSDBot(commands.AutoShardedBot):
         except pymysql.Error as e:
             print("Error %d: %s" % (e.args[0], e.args[1]))
     
-    async def on_message(self, message): # cogs
-        #print(message.author.id)
+    async def on_message(self, message):
         user = message.author
 
-        if not message.content.startswith('s!') and  str(user.id) in ac.YesList:  
+        if str(user.id) in ac.YesList:  
             db.insertMessageInTable(message, self._init_db)
 
-        elif message.content.startswith('s!salut'):
-            if user.id == 585123574487187476:
-                await message.channel.send("Bonjour {} trou d'balle.".format(user))
-            else:
-                await message.channel.send("Bonjour <@{}>.".format(user.id))
+        await self.process_commands(message)
 
-    def run(self, token, *args, **kwargs):
-        try:
-            super().run(token, *args, **kwargs)
-        except KeyboardInterrupt:
-            exit(0)
+
 
 
 if __name__ == "__main__":
