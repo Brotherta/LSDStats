@@ -18,6 +18,7 @@ def insertMessageInTable(message, connection):
     channelID = message.channel.id
     time = message.created_at
 
+
     try:
         sql = "INSERT INTO `messages` (`UserID`, `message`,`Channel`, `time`) VALUES (%s, %s, %s, %s)"
         connection.cursor().execute(sql, (userID, content, channelID, time))
