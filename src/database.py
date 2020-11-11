@@ -17,11 +17,12 @@ def insertMessageInTable(message, connection):
     content = message.content
     channelID = message.channel.id
     time = message.created_at
+    messageID = message.id
 
 
     try:
-        sql = "INSERT INTO `messages` (`UserID`, `message`,`Channel`, `time`) VALUES (%s, %s, %s, %s)"
-        connection.cursor().execute(sql, (userID, content, channelID, time))
+        sql = "INSERT INTO `messages` (`UserID`, `message`,`Channel`, `messageID`, `time`) VALUES (%s, %s, %s, %s, %s)"
+        connection.cursor().execute(sql, (userID, content, channelID, messageID, time))
         logger.info("Collectings data from {} ".format(user))
         connection.commit()
 
