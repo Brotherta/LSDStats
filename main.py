@@ -1,16 +1,17 @@
 # bot.py
 import os
 import discord
+import logging
+import pymysql.cursors
 
 from discord.ext import commands
 from dotenv import load_dotenv
 
-import pymysql.cursors
 
-import data.settings
+import src.utils as utils
 import src.database as db
 import data.acceptingCollect as ac
-import logging
+
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -63,12 +64,23 @@ class LSDBot(commands.AutoShardedBot):
             print("Error %d: %s" % (e.args[0], e.args[1]))
     
     async def on_message(self, message):
-        user = message.author
-
-        if str(user.id) in ac.YesList:  
+        userID = message.author.id
+        is_accepting = db.get_user_id_accepts(self._init_db, userID)
+        if is_accepting != None:  
+            db.insertMessageInTable(message, self._init_db)
+        elif str(userID) in ac.YesList:
             db.insertMessageInTable(message, self._init_db)
 
         await self.process_commands(message)
+
+    async def on_reaction_add(self, reaction, user):
+        if reaction.message.id == int(utils.get_msg_react_id()) and reaction.emoji == '✅' :
+            if user.id != self.user.id:
+                db.update_accepting_users(user.id, self._init_db)
+                
+        elif reaction.message.id == int(utils.get_msg_react_id()) and reaction.emoji == '❌' :
+            if user.id != self.user.id:
+                db.update_accepting_users(user.id, self._init_db, False)
 
 
 
