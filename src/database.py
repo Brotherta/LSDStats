@@ -28,6 +28,7 @@ def insertMessageInTable(message, connection):
         logger.exception(e)
 
 
+
 def update_accepting_users(user_id, connection, adding=True):
     try:
         if adding:
@@ -44,6 +45,7 @@ def update_accepting_users(user_id, connection, adding=True):
         logger.exception(e)
 
 
+
 def get_user_id_accepts(connection, user_id):
     try:
         sql = "SELECT UserID FROM `accepts` WHERE UserID='%s'"
@@ -56,6 +58,7 @@ def get_user_id_accepts(connection, user_id):
 
     except Exception as e:
         logger.exception(e)
+
 
 
 def delete_message(connection, message_id):
