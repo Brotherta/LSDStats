@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 import src.utils as utils
 import src.database as db
-import data.acceptingCollect as ac
+
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -17,6 +17,8 @@ HOST = os.getenv('MyHOST')
 DB = os.getenv('DATABASE')
 USER = os.getenv('MyUSER')
 PWD = os.getenv('MyPWD')
+
+
 
 logger = logging.getLogger('LSDStats')
 logger.setLevel(logging.DEBUG)

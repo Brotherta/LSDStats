@@ -33,7 +33,7 @@ def update_accepting_users(user_id, connection, adding=True):
     try:
         if adding:
             sql = "INSERT INTO `accepts` (`UserID`) VALUES (%s)"
-            logger.info("Adding UserID {}".format(userID))
+            logger.info("Adding UserID {}".format(user_id))
         else:
             sql = "DELETE FROM `accepts` WHERE UserID='%s'"
 
