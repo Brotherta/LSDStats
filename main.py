@@ -88,6 +88,7 @@ class LSDBot(commands.AutoShardedBot):
             pass
 
 
+
     async def on_reaction_add(self, reaction, user):
         if reaction.message.id == int(utils.get_msg_react_id()) and reaction.emoji == '✅':
             if user.id != self.user.id:
