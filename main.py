@@ -18,8 +18,7 @@ DB = os.getenv('DATABASE')
 USER = os.getenv('MyUSER')
 PWD = os.getenv('MyPWD')
 
-Test = os.getenv('MYTEST')
-print(Test)
+
 
 logger = logging.getLogger('LSDStats')
 logger.setLevel(logging.DEBUG)
