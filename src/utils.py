@@ -26,4 +26,3 @@ def get_msg_react_id():
 
     except Exception as e:
         logger.exception(e)
-    
