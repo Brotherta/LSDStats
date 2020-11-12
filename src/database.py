@@ -9,7 +9,6 @@ import logging
 logger = logging.getLogger('LSDStats')
 
 
-
 def insertMessageInTable(message, connection):
     connection.ping(reconnect=True)
     user = message.author
@@ -18,7 +17,6 @@ def insertMessageInTable(message, connection):
     channelID = message.channel.id
     time = message.created_at
     messageID = message.id
-
 
     try:
         sql = "INSERT INTO `messages` (`UserID`, `message`,`Channel`, `messageID`, `time`) VALUES (%s, %s, %s, %s, %s)"
@@ -30,7 +28,7 @@ def insertMessageInTable(message, connection):
         logger.exception(e)
 
 
-def update_accepting_users(userID, connection, adding=True):  
+def update_accepting_users(userID, connection, adding=True):
     try:
         if adding:
             sql = "INSERT INTO `accepts` (`UserID`) VALUES (%s)"
@@ -41,9 +39,10 @@ def update_accepting_users(userID, connection, adding=True):
         connection.cursor().execute(sql, (userID))
         logger.info("Updating UserID in accepts db {}".format(userID))
         connection.commit()
-    
+
     except Exception as e:
         logger.exception(e)
+
 
 def get_user_id_accepts(connection, userID):
     try:
@@ -53,10 +52,11 @@ def get_user_id_accepts(connection, userID):
         with connection.cursor() as cur:
             cur.execute(sql, (userID))
             res = cur.fetchone()
-            return res                  # return None if is missed.
+            return res  # return None if is missed.
 
     except Exception as e:
         logger.exception(e)
+
 
 def delete_message(connection, messageID):
     try:
@@ -65,6 +65,6 @@ def delete_message(connection, messageID):
         connection.cursor().execute(sql, (messageID))
         logger.info("Deleting {} from messages".format(messageID))
         connection.commit()
-    
+
     except Exception as e:
         logger.exception(e)
