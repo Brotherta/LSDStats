@@ -5,22 +5,21 @@ import src.database as db
 import src.utils as utils
 import data.messageData as messageData
 
-
 from discord.ext import commands
 
 import logging
+
 logger = logging.getLogger('LSDStats')
+
 
 class SettingsCommands(commands.Cog):
 
-    def __init__(self,bot):
+    def __init__(self, bot):
         self.bot = bot
-
 
     @commands.command(name="salut")
     async def test(self, ctx):
         await ctx.send("Bonjour {}".format(ctx.message.author))
-
 
     @commands.command(name="init")
     @commands.is_owner()
@@ -39,8 +38,6 @@ class SettingsCommands(commands.Cog):
 
         await accept_decline.add_reaction("✅")
         await accept_decline.add_reaction("❌")
-    
-
 
 
 def setup(bot):
