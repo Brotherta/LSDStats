@@ -73,6 +73,18 @@ class LSDBot(commands.AutoShardedBot):
 
         await self.process_commands(message)
 
+    async def on_message_delete(self, message):
+        userID = message.author.id
+        is_accepting = db.get_user_id_accepts(self._init_db, userID)
+        if is_accepting != None:
+            db.delete_message(self._init_db, message.id)
+
+    async def on_message_edit(before, after):
+        userID = message.author.id
+        is_accepting = db.get_user_id_accepts(self._init_db, userID)
+        if is_accepting != None:
+            pass
+
     async def on_reaction_add(self, reaction, user):
         if reaction.message.id == int(utils.get_msg_react_id()) and reaction.emoji == '✅' :
             if user.id != self.user.id:

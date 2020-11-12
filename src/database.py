@@ -53,7 +53,18 @@ def get_user_id_accepts(connection, userID):
         with connection.cursor() as cur:
             cur.execute(sql, (userID))
             res = cur.fetchone()
-            return res                  # return None is missed.
+            return res                  # return None if is missed.
 
+    except Exception as e:
+        logger.exception(e)
+
+def delete_message(connection, messageID):
+    try:
+        sql = "DELETE FROM `messages` WHERE messageID='%s'"
+
+        connection.cursor().execute(sql, (messageID))
+        logger.info("Deleting {} from messages".format(messageID))
+        connection.commit()
+    
     except Exception as e:
         logger.exception(e)
