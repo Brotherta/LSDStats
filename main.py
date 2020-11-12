@@ -69,7 +69,7 @@ class LSDBot(commands.AutoShardedBot):
         user_id = message.author.id
         is_accepting = db.get_user_id_accepts(self._init_db, user_id)
         if is_accepting is not None:
-            db.insertMessageInTable(message, self._init_db)
+            db.insert_message_in_table(message, self._init_db)
 
         await self.process_commands(message)
 
@@ -81,12 +81,12 @@ class LSDBot(commands.AutoShardedBot):
             db.delete_message(self._init_db, message.id)
 
 
-    async def on_message_edit(before, after):
-        user_id = message.author.id
+    async def on_message_edit(self, before, after):
+        user_id = before.author.id
         is_accepting = db.get_user_id_accepts(self._init_db, user_id)
         if is_accepting is not None:
-            pass
-
+            db.delete_message(self._init_db, after.id)
+            db.insert_message_in_table(after, self._init_db)
 
 
     async def on_reaction_add(self, reaction, user):
