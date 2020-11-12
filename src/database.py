@@ -28,7 +28,6 @@ def insertMessageInTable(message, connection):
         logger.exception(e)
 
 
-
 def update_accepting_users(user_id, connection, adding=True):
     try:
         if adding:
@@ -60,7 +59,6 @@ def get_user_id_accepts(connection, user_id):
         logger.exception(e)
 
 
-
 def delete_message(connection, message_id):
     try:
         sql = "DELETE FROM `messages` WHERE messageID='%s'"
@@ -71,3 +69,21 @@ def delete_message(connection, message_id):
 
     except Exception as e:
         logger.exception(e)
+
+
+def get_all_user_id_accepts(connection):
+    try:
+        sql = "SELECT UserID FROM `accepts`"
+        logger.info("Select all UserID from accepts")
+
+        with connection.cursor() as cur:
+            cur.execute(sql)
+            res = cur.fetchall()
+            return res               # return a list of dictionary which contains user ids as value
+
+    except Exception as e:
+        logger.exception(e)
+
+
+def get_nb_occ_msg(connection,user=None, msg):
+    pass

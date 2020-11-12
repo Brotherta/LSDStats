@@ -40,5 +40,18 @@ class SettingsCommands(commands.Cog):
         await accept_decline.add_reaction("❌")
 
 
+    @commands.command(name="count")
+    async def count(self, ctx, *args):
+        if args[0] == '-u':
+            user_id = int(args[1][3:len(args[1])-1])
+            if db.get_user_id_accepts(self.bot._init_db, user_id) is not None:
+                user = args[1]
+                msg = ' '.join(args[2:])
+
+                await ctx.send("User: {}\n Message: {}".format(user, msg))
+            else:
+                await ctx.send("Usage: count [-u @someone] message")
+
+
 def setup(bot):
     bot.add_cog(SettingsCommands(bot))

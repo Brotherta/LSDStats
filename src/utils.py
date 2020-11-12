@@ -28,3 +28,7 @@ def get_msg_react_id():
 
     except Exception as e:
         logger.exception(e)
+
+
+def get_nb_occ_msg(user=None, msg):
+    pass
