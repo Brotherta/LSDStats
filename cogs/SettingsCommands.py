@@ -24,16 +24,16 @@ class SettingsCommands(commands.Cog):
     @commands.command(name="init")
     @commands.is_owner()
     async def init_bot(self, ctx):
-        mychannel = None
+        my_channel = None
         guild = ctx.message.guild
 
         await guild.create_text_channel('lsd-stats-yes')
 
         for channel in ctx.guild.channels:
             if channel.name == 'lsd-stats-yes':
-                mychannel = channel
+                my_channel = channel
 
-        accept_decline = await mychannel.send(messageData.message_dict["Init"])
+        accept_decline = await my_channel.send(messageData.message_dict["Init"])
         utils.write_msg_react_id(accept_decline.id)
 
         await accept_decline.add_reaction("✅")
