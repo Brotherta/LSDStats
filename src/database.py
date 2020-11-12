@@ -38,7 +38,7 @@ def update_accepting_users(user_id, connection, adding=True):
             sql = "DELETE FROM `accepts` WHERE UserID='%s'"
 
         connection.cursor().execute(sql, user_id)
-        logger.info("Updating UserID in accepts db {}".format(_user_id))
+        logger.info("Updating UserID in accepts db {}".format(user_id))
         connection.commit()
 
     except Exception as e:
