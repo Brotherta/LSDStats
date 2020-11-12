@@ -6,23 +6,25 @@ import logging
 
 logger = logging.getLogger('LSDStats')
 
-def write_msg_react_id(messageID):
+
+def write_msg_react_id(message_id):
     try:
         file = open('data/messageReaction.txt', "w")
         file.truncate(0)
-        file.write("{}".format(messageID))
+        file.write("{}".format(message_id))
         file.close()
 
     except Exception as e:
         logger.exception(e)
-    
+
+
 def get_msg_react_id():
     try:
-        Rid =''
+        r_id = ''
         file = open('data/messageReaction.txt', "r")
-        Rid = file.read()
+        r_id = file.read()
         file.close()
-        return Rid
+        return r_id
 
     except Exception as e:
         logger.exception(e)
