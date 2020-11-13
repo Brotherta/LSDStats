@@ -98,6 +98,7 @@ class SettingsCommands(commands.Cog):
                 current = 0
                 for talker in dict_user.keys():
                     if dict_user[talker] > current:
+                        current = dict_user[talker]
                         talker_user_id = talker
                 talker_user_acc = dict_user[talker_user_id]
 
