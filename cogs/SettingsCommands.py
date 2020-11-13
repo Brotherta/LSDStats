@@ -95,8 +95,9 @@ class SettingsCommands(commands.Cog):
                             dict_user[user_id] = 0
 
                 talker_user_id = 0
+                current = 0
                 for talker in dict_user.keys():
-                    if dict_user[talker] > talker_user_id:
+                    if dict_user[talker] > current:
                         talker_user_id = talker
                 talker_user_acc = dict_user[talker_user_id]
 
