@@ -67,43 +67,43 @@ class SettingsCommands(commands.Cog):
             else:
                 await ctx.send("Usage: count [-u @someone] message")
 
-    @commands.command(name="talker")
-    async def talker(self, ctx, *args):
-        if db.get_user_id_accepts(self.bot._init_db, ctx.message.author.id) is not None:
-            if args[0] is not None:
-                accepts_list = db.get_all_user_id_accepts(self.bot._init_db)
-                channel_id = int(args[0][2:len(args[0])-1])
-                asked_channel = None
-                for channel in ctx.message.guild.channels:
-                    if channel.id == channel_id:
-                        asked_channel = channel
-
-                if asked_channel is None:
-                    await ctx.send("Je ne connais pas ce channel")
-
-                user_id = None
-                dict_user = {}
-                nb_msg = 0
-                messages = await asked_channel.history(limit=2000).flatten()
-                for message in messages:
-                    nb_msg += 1
-                    user_id = message.author.id
-                    if str(user_id) in accepts_list:
-                        if user_id in dict_user:
-                            dict_user[user_id] += 1
-                        else:
-                            dict_user[user_id] = 0
-
-                talker_user_id = 0
-                current = 0
-                for talker in dict_user.keys():
-                    if dict_user[talker] > current:
-                        current = dict_user[talker]
-                        talker_user_id = talker
-                talker_user_acc = dict_user[talker_user_id]
-
-                stat = math.floor(talker_user_acc/nb_msg * 100)
-                await ctx.send("Le titre d'harceleur du channel <#{}> est attribué à : <@!{}> avec un total de {}!\n Ça représente {}% des messages du channel...".format(channel_id, talker_user_id, talker_user_acc, stat))
+    # @commands.command(name="talker")
+    # async def talker(self, ctx, *args):
+    #     if db.get_user_id_accepts(self.bot._init_db, ctx.message.author.id) is not None:
+    #         if args[0] is not None:
+    #             accepts_list = db.get_all_user_id_accepts(self.bot._init_db)
+    #             channel_id = int(args[0][2:len(args[0])-1])
+    #             asked_channel = None
+    #             for channel in ctx.message.guild.channels:
+    #                 if channel.id == channel_id:
+    #                     asked_channel = channel
+    #
+    #             if asked_channel is None:
+    #                 await ctx.send("Je ne connais pas ce channel")
+    #
+    #             user_id = None
+    #             dict_user = {}
+    #             nb_msg = 0
+    #             messages = await asked_channel.history(limit=2000).flatten()
+    #             for message in messages:
+    #                 nb_msg += 1
+    #                 user_id = message.author.id
+    #                 if str(user_id) in accepts_list:
+    #                     if user_id in dict_user:
+    #                         dict_user[user_id] += 1
+    #                     else:
+    #                         dict_user[user_id] = 0
+    #
+    #             talker_user_id = 0
+    #             current = 0
+    #             for talker in dict_user.keys():
+    #                 if dict_user[talker] > current:
+    #                     current = dict_user[talker]
+    #                     talker_user_id = talker
+    #             talker_user_acc = dict_user[talker_user_id]
+    #
+    #             stat = math.floor(talker_user_acc/nb_msg * 100)
+    #             await ctx.send("Le titre d'harceleur du channel <#{}> est attribué à : <@!{}> avec un total de {}!\n Ça représente {}% des messages du channel...".format(channel_id, talker_user_id, talker_user_acc, stat))
 
 
 
