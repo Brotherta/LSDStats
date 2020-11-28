@@ -70,7 +70,7 @@ class SettingsCommands(commands.Cog):
                     if db.get_user_id_accepts(self.bot._init_db, user_id) is not None:
                         i += 1
                     else:
-                        await ctx.send("Usage: Les stats ne peuvent se faire que sur les utilisateurs ayant accepté la collecte de leurs messages.")
+                        await ctx.send("Attention ! Stats uniquement sur les personnes consentantes.")
                         return
 
                 elif args[i][1] == 'c':
@@ -88,11 +88,12 @@ class SettingsCommands(commands.Cog):
                 else:
                     await ctx.send("Usage: count [-u @someone] [-m \"message\"] [-c channel]")
                     return
+            else:
+                await ctx.send("Usage: count [-u @someone] [-m \"message\"] [-c channel]")
+                return
             i += 1
 
-        print("Infos commandes:",user_id,channel,msg)
         dico_occ = utils.get_occ_msg(self.bot._init_db,msg,user_id,channel)
-        print("Réponse:",dico_occ)
         nb_occ = dico_occ["COUNT(message)"]
 
         await ctx.send(" Réponse: {}".format(nb_occ))
