@@ -30,6 +30,6 @@ def get_msg_react_id():
     except Exception as e:
         logger.exception(e)
 
-
 def get_occ_msg(connection, msg, user, channel):
     return db.get_occ_msg_data(connection, msg, user, channel)
+

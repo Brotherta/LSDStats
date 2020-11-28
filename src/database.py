@@ -9,7 +9,7 @@ import logging
 logger = logging.getLogger('LSDStats')
 
 
-def insertMessageInTable(message, connection):
+def insert_message_in_table(message, connection):
     connection.ping(reconnect=True)
     user = message.author
     user_id = user.id
@@ -79,7 +79,8 @@ def get_all_user_id_accepts(connection):
         with connection.cursor() as cur:
             cur.execute(sql)
             res = cur.fetchall()
-            return res               # return a list of dictionary which contains user ids as value
+            res_list = [user["UserID"] for user in res]
+            return res_list    # return a list of dictionary which contains user ids as value
 
     except Exception as e:
         logger.exception(e)
