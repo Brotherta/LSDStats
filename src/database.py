@@ -85,5 +85,35 @@ def get_all_user_id_accepts(connection):
         logger.exception(e)
 
 
-def get_nb_occ_msg(connection,user=None, msg):
-    pass
+def get_occ_msg_data(connection, msg, user, channel):
+    options = [msg, user, channel]
+    tab_sql = [" message LIKE '%{}%'", " UserID={}", " Channel={}"]
+    tab_info = [" with '{}'", " written by {}", " on the channel {}"]
+    nb_option = 0
+    print("Options data:", options)
+    try:
+        sql = "SELECT COUNT(message) FROM `messages`"
+        for i in range(3):
+
+            if options[i] != None:
+                if nb_option == 0:
+                    sql += " WHERE"
+                else:
+                    sql += " AND"
+                sql += tab_sql[i].format(options[i])
+                nb_option += 1
+
+
+        print(sql)
+
+        #info = "Count occurencies of messages"
+        #logger.info("Count occurencies of {} written by {}".format(msg, user))
+
+        with connection.cursor() as cur:
+            cur.execute(sql)
+            res = cur.fetchone()
+
+            return res
+
+    except Exception as e:
+        logger.exception(e)
