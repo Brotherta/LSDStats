@@ -65,18 +65,38 @@ class SettingsCommands(commands.Cog):
         while i < len(args):
 
             if args[i][0] == '-':
+
+                # Absence d'argument
+                if i+1>= len(args) or args[i+1][0] == '-':
+                    await ctx.send("Absence d'argument !")
+                    return
+
+                # User
                 if args[i][1] == 'u':
-                    user_id = int(args[i + 1][3:len(args[i + 1]) - 1])
-                    if db.get_user_id_accepts(self.bot._init_db, user_id) is not None:
+                    user_id = args[i+1]
+                    print(user_id)
+                    if user_id[:3] == "<@!" and user_id[-1] == ">":    #Vérification argument
+                        user_id = int(args[i + 1][3:len(args[i + 1]) - 1])
+                    else:
+                        await ctx.send("Mauvais argument, usage: -u @utilisateur")
+                        return
+                    if db.get_user_id_accepts(self.bot._init_db, user_id) is not None:   #Vérification consentement utilisateur
                         i += 1
                     else:
                         await ctx.send("Attention ! Stats uniquement sur les personnes consentantes.")
                         return
 
+                # Channel
                 elif args[i][1] == 'c':
-                    channel = int(args[i+1][2:len(args[i+1])-1])
+                    channel = args[i+1]
+                    if channel[:2] == "<#" and channel[-1] == ">":
+                        channel = int(args[i + 1][2:len(args[i + 1]) - 1])
+                    else:
+                        await ctx.send("Mauvais argument, usage: -c #nom_channel ")
+                        return
                     i += 1
 
+                # Message
                 elif args[i][1] == 'm':
                     if args[i+1][0] != "-":
                         msg = args[i+1]
@@ -85,9 +105,12 @@ class SettingsCommands(commands.Cog):
                         await ctx.send("Usage: count [-m \"message\"]")
                         return
 
+                # mauvaise option
                 else:
                     await ctx.send("Usage: count [-u @someone] [-m \"message\"] [-c channel]")
                     return
+
+            # pas d'option
             else:
                 await ctx.send("Usage: count [-u @someone] [-m \"message\"] [-c channel]")
                 return
