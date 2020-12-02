@@ -60,14 +60,14 @@ class SettingsCommands(commands.Cog):
         user_id = None
         msg = None
         channel = None
-
+        print("" == None)
         i = 0
         while i < len(args):
 
             if args[i][0] == '-':
 
                 # Absence d'argument
-                if i+1>= len(args) or args[i+1][0] == '-':
+                if i+1>= len(args) or args[i+1] == "" or args[i+1][0] == '-':
                     await ctx.send("Absence d'argument !")
                     return
 
