@@ -31,7 +31,7 @@ def insert_message_in_table(message, connection):
 def update_accepting_users(user_id, connection, adding=True):
     try:
         if adding:
-            sql = "INSERT INTO `accepts` (`UserID`) VALUES (%s)"
+            sql = "INSERT INTO `accepts`  (`UserID`) VALUES (%s)"
             logger.info("Adding UserID {}".format(user_id))
         else:
             sql = "DELETE FROM `accepts` WHERE UserID='%s'"
@@ -99,10 +99,8 @@ def get_occ_msg_data(connection, msg, user, channel):
 
         for i in range(3):
             if options[i] != None:
-
                 if nb_option == 0:
                     sql += " WHERE"
-
                 else:
                     sql += " AND"
 
@@ -119,3 +117,30 @@ def get_occ_msg_data(connection, msg, user, channel):
 
     except Exception as e:
         logger.exception(e)
+
+
+def get_talker_channel(connection, channel_id):
+    try:
+        sql = "SELECT UserID, COUNT(*) AS nb FROM messages WHERE Channel={} GROUP BY UserID ORDER BY nb DESC LIMIT 0,1;".format(channel_id)
+        logger.info(sql)
+        with connection.cursor() as cur:
+            cur.execute(sql)
+            res = cur.fetchone()
+            return res  # return None if is missed.
+
+    except Exception as e:
+        logger.exception(e)
+
+
+def get_all_msg_channel(connection, channel_id):
+    try:
+        sql = "SELECT COUNT(*) AS nb FROM messages WHERE Channel={};".format(channel_id)
+        logger.info(sql)
+        with connection.cursor() as cur:
+            cur.execute(sql)
+            res = cur.fetchone()
+            return res  # return None if is missed.
+
+    except Exception as e:
+        logger.exception(e)
+

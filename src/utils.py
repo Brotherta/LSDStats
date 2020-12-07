@@ -6,6 +6,7 @@ from discord.ext import commands
 import logging
 
 logger = logging.getLogger('LSDStats')
+COLOR = 0xba0b0b
 
 
 def write_msg_react_id(message_id):
@@ -29,6 +30,7 @@ def get_msg_react_id():
 
     except Exception as e:
         logger.exception(e)
+
 
 def get_occ_msg(connection, msg, user, channel):
     return db.get_occ_msg_data(connection, msg, user, channel)
