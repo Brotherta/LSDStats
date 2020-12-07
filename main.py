@@ -102,6 +102,18 @@ class LSDBot(commands.AutoShardedBot):
             if payload.user_id != self.user.id:
                 db.update_accepting_users(payload.user_id, self.init_db, False)
 
+    async def on_command_error(self, ctx, error):
+        embed = discord.Embed(
+            title="🤖 ❌ Biboop, I love stats ! But you're wrong !",
+            color=utils.COLOR
+        )
+        embed.add_field(
+            name="{} ...".format(error),
+            value="📚 Try:  `s!help`\n\n",
+            inline=False
+        )
+        await ctx.send(embed=embed)
+
 
 if __name__ == "__main__":
     bot = LSDBot()
