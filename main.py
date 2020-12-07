@@ -18,7 +18,7 @@ DB = os.getenv('DATABASE')
 USER = os.getenv('MyUSER')
 PWD = os.getenv('MyPWD')
 
-
+list_user_accept = []
 
 logger = logging.getLogger('LSDStats')
 logger.setLevel(logging.DEBUG)
@@ -38,9 +38,11 @@ class LSDBot(commands.AutoShardedBot):
 
     def __init__(self):
         super().__init__(command_prefix="s!")  # help_command=_default
-        self._load_extensions()
         self.remove_command("help")
-        self._init_db = None
+        self._load_extensions()
+        self.init_db = None
+        self.is_accepting = []
+        self.accept_channel_id = 0
 
 
     def _load_extensions(self):
@@ -55,48 +57,63 @@ class LSDBot(commands.AutoShardedBot):
     async def on_ready(self):
         print(f'{self.user} has connected to Discord!')
         try:
-            self._init_db = pymysql.connect(host=HOST,
+            self.init_db = pymysql.connect(host=HOST,
                                             user=USER,
                                             password=PWD,
                                             db=DB,
                                             charset='utf8mb4',
                                             cursorclass=pymysql.cursors.DictCursor)
+            self.is_accepting = db.get_all_user_id_accepts(connection=self.init_db)
+            self.accept_channel_id = int(utils.get_msg_react_id())
         except pymysql.Error as e:
             print("Error %d: %s" % (e.args[0], e.args[1]))
 
 
     async def on_message(self, message):
         user_id = message.author.id
-        is_accepting = db.get_user_id_accepts(self._init_db, user_id)
-        if is_accepting is not None:
-            db.insert_message_in_table(message, self._init_db)
-
-        await self.process_commands(message)
+        if str(user_id) in self.is_accepting:
+            db.insert_message_in_table(message, self.init_db)
+            await self.process_commands(message)
+        elif message.author.id is self.user.id:
+            await message.add_reaction('🤖')
+        else:
+            await message.add_reaction('🤨')
 
 
     async def on_message_delete(self, message):
         user_id = message.author.id
-        is_accepting = db.get_user_id_accepts(self._init_db, user_id)
-        if is_accepting is not None:
-            db.delete_message(self._init_db, message.id)
+        if str(user_id) in self.is_accepting:
+            db.delete_message(self.init_db, message.id)
 
 
     async def on_message_edit(self, before, after):
         user_id = before.author.id
-        is_accepting = db.get_user_id_accepts(self._init_db, user_id)
-        if is_accepting is not None:
-            db.delete_message(self._init_db, after.id)
-            db.insert_message_in_table(after, self._init_db)
+        if str(user_id) in self.is_accepting:
+            db.delete_message(self.init_db, after.id)
+            db.insert_message_in_table(after, self.init_db)
 
 
-    async def on_reaction_add(self, reaction, user):
-        if reaction.message.id == int(utils.get_msg_react_id()) and reaction.emoji == '✅':
-            if user.id != self.user.id:
-                db.update_accepting_users(user.id, self._init_db)
+    async def on_raw_reaction_add(self, payload):
+        if payload.message_id == self.accept_channel_id and str(payload.emoji) == '✅':
+            if payload.user_id != self.user.id:
+                db.update_accepting_users(payload.user_id, self.init_db)
 
-        elif reaction.message.id == int(utils.get_msg_react_id()) and reaction.emoji == '❌':
-            if user.id != self.user.id:
-                db.update_accepting_users(user.id, self._init_db, False)
+        elif payload.message_id == self.accept_channel_id and str(payload.emoji) == '❌':
+            if payload.user_id != self.user.id:
+                db.update_accepting_users(payload.user_id, self.init_db, False)
+
+
+    # async def on_command_error(self, ctx, error):
+    #     embed = discord.Embed(
+    #         title="🤖 ❌ Biboop, I love stats ! But you're wrong !",
+    #         color=utils.COLOR
+    #     )
+    #     embed.add_field(
+    #         name="{} ...".format(error),
+    #         value="📚 Try:  `s!help`\n\n",
+    #         inline=False
+    #     )
+    #     await ctx.send(embed=embed)
 
 
 if __name__ == "__main__":
