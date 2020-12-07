@@ -76,8 +76,6 @@ class LSDBot(commands.AutoShardedBot):
             await self.process_commands(message)
         elif message.author.id is self.user.id:
             await message.add_reaction('🤖')
-        else:
-            await message.add_reaction('🤨')
 
 
     async def on_message_delete(self, message):
