@@ -90,8 +90,11 @@ class SettingsCommands(commands.Cog):
                 # User
                 if args[i][1] == 'u':
                     user_id = args[i + 1]
-                    if user_id[:3] == "<@!" and user_id[-1] == ">":  # Vérification argument
-                        user_id = int(args[i + 1][3:len(args[i + 1]) - 1])
+                    if user_id[:2] == "<@" and user_id[-1] == ">":  # Vérification argument
+                        if user_id[2] == '!':
+                            user_id = int(args[i + 1][3:len(args[i + 1]) - 1])
+                        else:
+                            user_id = int(args[i + 1][2:len(args[i + 1]) - 1])
                     else:
                         await ctx.send(embed=error_embed)
                         return
