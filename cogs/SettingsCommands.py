@@ -2,14 +2,15 @@ import os
 import discord
 import random
 import math
+import logging
 
 import src.database as db
 import src.utils as utils
 import data.messageData as messageData
 
 from discord.ext import commands
+from random import randint
 
-import logging
 
 logger = logging.getLogger('LSDStats')
 
@@ -192,6 +193,47 @@ class SettingsCommands(commands.Cog):
                     inline=False
                 )
                 await ctx.send(embed=embed)
+
+    @commands.command(name="quote")
+    async def quote(self, ctx, *args):
+        error_embed = discord.Embed(
+            title="🤖 Biboop, I love stats ! Mayday ! There is a problem Jackson ! ☠",
+            color=utils.COLOR
+        )
+        error_embed.add_field(
+            name="Quote commands !",
+            value="📚 `s!quote [#channel]`\nGive a sentence or a word out of his context\n\n\n\n",
+            inline=False
+        )
+        if len(args) == 0:
+            res = db.get_all_message_id(self.bot.init_db, 0)
+        else:
+            channel_id = utils.channel_to_channel_id(args[0])
+            if channel_id == 0:
+                await ctx.send(embed=error_embed)
+                return
+            else:
+                res = db.get_all_message_id(self.bot.init_db, channel_id)
+
+        random_index = randint(0, len(res) - 1)
+        random_id = res[random_index]['messageID']
+        print(random_id)
+        random_message = db.get_content_message_id(self.bot.init_db, int(random_id))
+        user_id = random_message['UserID']
+        message = random_message['message']
+        channel_id = random_message['channel']
+        time = random_message['time']
+
+        embed = discord.Embed(
+            title="🤖 Biboop, I love stats ! Here's my research...",
+            color=utils.COLOR
+        )
+        embed.add_field(
+            name="📚 Out of context :",
+            value="In <#{}>'s channel, <@{}> send `{}` at `{}` ".format(channel_id, user_id, message, time),
+            inline=False
+        )
+        await ctx.send(embed=embed)
 
 
 

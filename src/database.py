@@ -1,9 +1,3 @@
-import os
-
-import discord
-import pymysql.cursors
-
-from dotenv import load_dotenv
 import logging
 
 logger = logging.getLogger('LSDStats')
@@ -23,7 +17,6 @@ def insert_message_in_table(message, connection):
         connection.cursor().execute(sql, (user_id, content, channel_id, message_id, time))
         logger.info("Collectings data from {} ".format(user))
         connection.commit()
-
     except Exception as e:
         logger.exception(e)
 
@@ -39,7 +32,6 @@ def update_accepting_users(user_id, connection, adding=True):
         connection.cursor().execute(sql, user_id)
         logger.info("Updating UserID in accepts db {}".format(user_id))
         connection.commit()
-
     except Exception as e:
         logger.exception(e)
 
@@ -54,7 +46,6 @@ def get_user_id_accepts(connection, user_id):
             cur.execute(sql, user_id)
             res = cur.fetchone()
             return res  # return None if is missed.
-
     except Exception as e:
         logger.exception(e)
 
@@ -66,7 +57,6 @@ def delete_message(connection, message_id):
         connection.cursor().execute(sql, message_id)
         logger.info("Deleting {} from messages".format(message_id))
         connection.commit()
-
     except Exception as e:
         logger.exception(e)
 
@@ -81,7 +71,6 @@ def get_all_user_id_accepts(connection):
             res = cur.fetchall()
             res_list = [user["UserID"] for user in res]
             return res_list    # return a list of dictionary which contains user ids as value
-
     except Exception as e:
         logger.exception(e)
 
@@ -98,7 +87,7 @@ def get_occ_msg_data(connection, msg, user, channel):
         nb_option = 0
 
         for i in range(3):
-            if options[i] != None:
+            if options[i] is not None:
                 if nb_option == 0:
                     sql += " WHERE"
                 else:
@@ -114,7 +103,6 @@ def get_occ_msg_data(connection, msg, user, channel):
             cur.execute(sql)
             res = cur.fetchone()
             return res
-
     except Exception as e:
         logger.exception(e)
 
@@ -127,7 +115,6 @@ def get_talker_channel(connection, channel_id):
             cur.execute(sql)
             res = cur.fetchone()
             return res  # return None if is missed.
-
     except Exception as e:
         logger.exception(e)
 
@@ -140,7 +127,33 @@ def get_all_msg_channel(connection, channel_id):
             cur.execute(sql)
             res = cur.fetchone()
             return res  # return None if is missed.
-
     except Exception as e:
         logger.exception(e)
 
+
+def get_all_message_id(connection, channel_id):
+    if channel_id != 0:
+        channel_id_sql = " WHERE Channel like '%{}%'".format(channel_id)
+    else:
+        channel_id_sql = ""
+    try:
+        sql = "SELECT messageID FROM messages{};".format(channel_id_sql)
+        logger.info(sql)
+        with connection.cursor() as cur:
+            cur.execute(sql)
+            res = cur.fetchall()
+            return res
+    except Exception as e:
+        logger.exception(e)
+
+
+def get_content_message_id(connection, message_id):
+    try:
+        sql = "SELECT UserID, message, channel, time FROM messages WHERE messageID={}".format(message_id)
+        logger.info(sql)
+        with connection.cursor() as cur:
+            cur.execute(sql)
+            res = cur.fetchone()
+            return res
+    except Exception as e:
+        logger.exception(e)
