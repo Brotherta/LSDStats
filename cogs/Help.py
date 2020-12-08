@@ -39,7 +39,6 @@ class Help(commands.Cog):
             text="Work in progress... give me idea to improve myself !",
             icon_url=ctx.me.avatar_url
         )
-
         await ctx.send(embed=embed)
 
 
