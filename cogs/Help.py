@@ -21,7 +21,7 @@ class Help(commands.Cog):
         )
         embed.add_field(
             name="Quote commands !",
-            value="📚 `s!quote`\nGive a sentence or a word out of his context\n\n\n\n",
+            value="📚 `s!quote [#channel]`\nGive a sentence or a word out of his context\n\n\n\n",
             inline=False
         )
         embed.add_field(
@@ -36,7 +36,7 @@ class Help(commands.Cog):
             inline=False
         )
         embed.set_footer(
-            text="Work in progress... quote command isn't available",
+            text="Work in progress... give me idea to improve myself !",
             icon_url=ctx.me.avatar_url
         )
 

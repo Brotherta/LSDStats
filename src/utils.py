@@ -32,6 +32,15 @@ def get_msg_react_id():
         logger.exception(e)
 
 
+def channel_to_channel_id(channel):
+    if channel[:2] == "<#" and channel[-1] == ">":
+        channel = int(channel[2:len(channel) - 1])
+        return channel
+    else:
+        return 0
+
+
+
 def get_occ_msg(connection, msg, user, channel):
     return db.get_occ_msg_data(connection, msg, user, channel)
 

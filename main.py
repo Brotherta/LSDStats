@@ -103,17 +103,17 @@ class LSDBot(commands.AutoShardedBot):
                 self.is_accepting = db.get_all_user_id_accepts(self.init_db)
 
 
-    async def on_command_error(self, ctx, error):
-        embed = discord.Embed(
-            title="🤖 ❌ Biboop, I love stats ! But you're wrong !",
-            color=utils.COLOR
-        )
-        embed.add_field(
-            name="{} ...".format(error),
-            value="📚 Try:  `s!help`\n\n",
-            inline=False
-        )
-        await ctx.send(embed=embed)
+    # async def on_command_error(self, ctx, error):
+    #     embed = discord.Embed(
+    #         title="🤖 ❌ Biboop, I love stats ! But you're wrong !",
+    #         color=utils.COLOR
+    #     )
+    #     embed.add_field(
+    #         name="{} ...".format(error),
+    #         value="📚 Try:  `s!help`\n\n",
+    #         inline=False
+    #     )
+    #     await ctx.send(embed=embed)
 
 
 if __name__ == "__main__":
