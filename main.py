@@ -95,12 +95,12 @@ class LSDBot(commands.AutoShardedBot):
         if payload.message_id == self.accept_channel_id and str(payload.emoji) == '✅':
             if payload.user_id != self.user.id:
                 db.update_accepting_users(payload.user_id, self.init_db)
-                self.accept_channel_id = db.get_all_user_id_accepts(self.init_db)
+                self.is_accepting = db.get_all_user_id_accepts(self.init_db)
 
         elif payload.message_id == self.accept_channel_id and str(payload.emoji) == '❌':
             if payload.user_id != self.user.id:
                 db.update_accepting_users(payload.user_id, self.init_db, False)
-                self.accept_channel_id = db.get_all_user_id_accepts(self.init_db)
+                self.is_accepting = db.get_all_user_id_accepts(self.init_db)
 
 
     async def on_command_error(self, ctx, error):
