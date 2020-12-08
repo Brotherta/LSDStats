@@ -207,20 +207,21 @@ class SettingsCommands(commands.Cog):
             inline=False
         )
         if len(args) == 0:
-            res = db.get_all_message_id(self.bot.init_db, 0)
+            res = db.get_all_message_id(self.bot.init_db, 0, 20)
         else:
             channel_id = utils.channel_to_channel_id(args[0])
             if channel_id == 0:
                 await ctx.send(embed=error_embed)
                 return
             else:
-                res = db.get_all_message_id(self.bot.init_db, channel_id)
+                res = db.get_all_message_id(self.bot.init_db, channel_id, 20)
 
         random_index = randint(0, len(res) - 1)
         random_id = res[random_index]['messageID']
+
         random_message = db.get_content_message_id(self.bot.init_db, int(random_id))
-        user_id = random_message['UserID']
         message = random_message['message']
+        user_id = random_message['UserID']
         channel_id = random_message['channel']
         time = random_message['time']
 
@@ -230,8 +231,16 @@ class SettingsCommands(commands.Cog):
         )
         embed.add_field(
             name="📚 Out of context :",
-            value="In <#{}>'s channel, <@{}> send `{}` at `{}` ".format(channel_id, user_id, message, time),
+            value="In <#{}>'s channel, <@{}> send: ".format(channel_id, user_id),
             inline=False
+        )
+        embed.add_field(
+            name="📕 message :",
+            value=message,
+            inline=False
+        )
+        embed.set_footer(
+            text="Date : {}".format(time)
         )
         await ctx.send(embed=embed)
         if "https://tenor" in message:

@@ -131,13 +131,13 @@ def get_all_msg_channel(connection, channel_id):
         logger.exception(e)
 
 
-def get_all_message_id(connection, channel_id):
+def get_all_message_id(connection, channel_id, limit):
     if channel_id != 0:
-        channel_id_sql = " WHERE Channel like '%{}%'".format(channel_id)
+        channel_id_sql = " AND Channel like '%{}%'".format(channel_id)
     else:
         channel_id_sql = ""
     try:
-        sql = "SELECT messageID FROM messages{};".format(channel_id_sql)
+        sql = "SELECT messageID FROM messages{} WHERE LENGTH(message)>{};".format(channel_id_sql, limit)
         logger.info(sql)
         with connection.cursor() as cur:
             cur.execute(sql)
