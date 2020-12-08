@@ -217,7 +217,6 @@ class SettingsCommands(commands.Cog):
 
         random_index = randint(0, len(res) - 1)
         random_id = res[random_index]['messageID']
-        print(random_id)
         random_message = db.get_content_message_id(self.bot.init_db, int(random_id))
         user_id = random_message['UserID']
         message = random_message['message']
