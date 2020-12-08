@@ -157,7 +157,7 @@ class SettingsCommands(commands.Cog):
             )
             embed.add_field(
                 name="Talker commands !",
-                value="📚 `s!talker [-c #channel]`\nGive the user who's "
+                value="📚 `s!talker #channel`\nGive the user who's "
                       "the most active of the server, or in a specific channel.",
                 inline=False
             )
@@ -193,6 +193,7 @@ class SettingsCommands(commands.Cog):
                     inline=False
                 )
                 await ctx.send(embed=embed)
+
 
     @commands.command(name="quote")
     async def quote(self, ctx, *args):
@@ -233,8 +234,8 @@ class SettingsCommands(commands.Cog):
             inline=False
         )
         await ctx.send(embed=embed)
-
-
+        if "https://tenor" in message:
+            await ctx.send(message)
 
 
 def setup(bot):
