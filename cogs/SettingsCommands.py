@@ -207,14 +207,14 @@ class SettingsCommands(commands.Cog):
             inline=False
         )
         if len(args) == 0:
-            res = db.get_all_message_id(self.bot.init_db, 0, 20)
+            res = db.get_all_message_id(self.bot.init_db, 0, 40)
         else:
             channel_id = utils.channel_to_channel_id(args[0])
             if channel_id == 0:
                 await ctx.send(embed=error_embed)
                 return
             else:
-                res = db.get_all_message_id(self.bot.init_db, channel_id, 20)
+                res = db.get_all_message_id(self.bot.init_db, channel_id, 40)
 
         random_index = randint(0, len(res) - 1)
         random_id = res[random_index]['messageID']
