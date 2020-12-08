@@ -26,7 +26,8 @@ class Help(commands.Cog):
         )
         embed.add_field(
             name="Talker commands !",
-            value="📚 `s!talker [#channel]`\nGive the user who's the most active of the server, or in a specific channel.",
+            value="📚 `s!talker [#channel]`\n"
+                  "Give the user who's the most active of the server, or in a specific channel.",
             inline=False
         )
         embed.add_field(

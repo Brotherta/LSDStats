@@ -61,7 +61,8 @@ class SettingsCommands(commands.Cog):
             if str(message.author.id) in accepts_list:
                 db.insert_message_in_table(message, self.bot.init_db)
                 acc += 1
-        await ctx.send("J\'ai pu lire {} de vos messages ! Vous en dites des bêtises...\nSurtout toi <@{}> !".format(acc, accepts_list[random_dumb]))
+        await ctx.send("J\'ai pu lire {} de vos messages ! "
+                       "Vous en dites des bêtises...\nSurtout toi <@{}> !".format(acc, accepts_list[random_dumb]))
 
 
     @commands.command(name="count")
@@ -90,7 +91,8 @@ class SettingsCommands(commands.Cog):
                 # User
                 if args[i][1] == 'u':
                     user_id = args[i + 1]
-                    if user_id[:2] == "<@" and user_id[-1] == ">":  # Vérification argument
+                    if user_id[:2] == "<@" and user_id[-1] == ">":
+                        # Vérification argument
                         if user_id[2] == '!':
                             user_id = int(args[i + 1][3:len(args[i + 1]) - 1])
                         else:
@@ -101,7 +103,8 @@ class SettingsCommands(commands.Cog):
                     if str(user_id) in self.bot.is_accepting:  # Vérification consentement utilisateur
                         i += 1
                     else:
-                        await ctx.send(embed=error_embed.add_field(name='Error :', value="Not Available on papi...", inline=False))
+                        await ctx.send(embed=error_embed.add_field(name='Error :', value="Not Available on papi...",
+                                                                   inline=False))
                         return
                 # Channel
                 elif args[i][1] == 'c':
@@ -153,7 +156,8 @@ class SettingsCommands(commands.Cog):
             )
             embed.add_field(
                 name="Talker commands !",
-                value="📚 `s!talker [-c #channel]`\nGive the user who's the most active of the server, or in a specific channel.",
+                value="📚 `s!talker [-c #channel]`\nGive the user who's "
+                      "the most active of the server, or in a specific channel.",
                 inline=False
             )
             await ctx.send(embed=embed)
@@ -183,8 +187,8 @@ class SettingsCommands(commands.Cog):
                 )
                 embed.add_field(
                     name="📈 Stats results :",
-                    value="The title of <#{}>'s channel harasser is attributed to : <@!{}> With `{}` messages!\n It's `{}%` of total messages...".format(
-                        channel_id, user_id, nb_msg_user, stat),
+                    value="The title of <#{}>'s channel harasser is attributed to : <@!{}> With `{}` messages!\n "
+                          "It's `{}%` of total messages...".format(channel_id, user_id, nb_msg_user, stat),
                     inline=False
                 )
                 await ctx.send(embed=embed)
