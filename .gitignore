@@ -135,3 +135,6 @@ dmypy.json
 *.log
 
 *.idea
+
+# reaction message_id
+*messageReaction.txt*
