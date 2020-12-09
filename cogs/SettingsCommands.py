@@ -243,7 +243,7 @@ class SettingsCommands(commands.Cog):
             text="Date : {}".format(time)
         )
         await ctx.send(embed=embed)
-        if "https://tenor" in message:
+        if "https://" in message:
             await ctx.send(message)
 
 
