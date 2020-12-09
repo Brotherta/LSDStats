@@ -65,6 +65,7 @@ class LSDBot(commands.AutoShardedBot):
                                             cursorclass=pymysql.cursors.DictCursor)
             self.is_accepting = db.get_all_user_id_accepts(connection=self.init_db)
             self.accept_channel_id = int(utils.get_msg_react_id())
+            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="🤖 s!help"))
         except pymysql.Error as e:
             print("Error %d: %s" % (e.args[0], e.args[1]))
 
