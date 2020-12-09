@@ -203,14 +203,14 @@ class SettingsCommands(commands.Cog):
             inline=False
         )
         if len(args) == 0:
-            res = db.get_all_message_id(self.bot.init_db, 0, 40)
+            res = db.get_all_message_id(self.bot.init_db, 0, 20)
         else:
             channel_id = utils.channel_to_channel_id(args[0])
             if channel_id == 0:
                 await ctx.send(embed=error_embed)
                 return
             else:
-                res = db.get_all_message_id(self.bot.init_db, channel_id, 40)
+                res = db.get_all_message_id(self.bot.init_db, channel_id, 20)
                 if len(res) == 0:
                     print("yes wrong")
                     await ctx.send(embed=discord.Embed(
@@ -218,7 +218,7 @@ class SettingsCommands(commands.Cog):
                         color=utils.COLOR
                     ).add_field(
                         name="Quote commands !",
-                        value="📚 `s!quote [#channel]`\nThere is no message with 40 char or more",
+                        value="📚 `s!quote [#channel]`\nThere is no message with {} char or more".fomrat(20),
                         inline=False
                     ))
                     return
