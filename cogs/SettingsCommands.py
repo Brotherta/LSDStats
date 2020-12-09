@@ -11,7 +11,6 @@ import data.messageData as messageData
 from discord.ext import commands
 from random import randint
 
-
 logger = logging.getLogger('LSDStats')
 
 
@@ -54,7 +53,7 @@ class SettingsCommands(commands.Cog):
     @commands.command(name="strip")
     async def strip_channels(self, ctx):
         accepts_list = db.get_all_user_id_accepts(self.bot.init_db)
-        random_dumb = random.randint(0, len(accepts_list)-1)
+        random_dumb = random.randint(0, len(accepts_list) - 1)
         channel = ctx.channel
         messages = await channel.history(limit=1000).flatten()
         acc = 0
@@ -64,7 +63,6 @@ class SettingsCommands(commands.Cog):
                 acc += 1
         await ctx.send("J\'ai pu lire {} de vos messages ! "
                        "Vous en dites des bêtises...\nSurtout toi <@{}> !".format(acc, accepts_list[random_dumb]))
-
 
     @commands.command(name="count")
     async def count(self, ctx, *args):
@@ -147,7 +145,6 @@ class SettingsCommands(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-
     @commands.command(name="talker")
     async def talker(self, ctx, *args):
         if len(args) == 0:
@@ -165,7 +162,7 @@ class SettingsCommands(commands.Cog):
         else:
             channel_id = 0
             try:
-                channel_id = int(args[0][2:len(args[0])-1])
+                channel_id = int(args[0][2:len(args[0]) - 1])
             except ValueError as e:
                 embed = discord.Embed(
                     title="🤖 Biboop, I love stats ! But I don't know `{}` channel ! ☠".format(args[0]),
@@ -181,7 +178,7 @@ class SettingsCommands(commands.Cog):
                 nb_msg_user = talker_dict['nb']
                 nb_msg = all_message['nb']
 
-                stat = math.floor(nb_msg_user/nb_msg * 100)
+                stat = math.floor(nb_msg_user / nb_msg * 100)
                 embed = discord.Embed(
                     title="🤖 Biboop, I love stats ! Here's my count...",
                     color=utils.COLOR
@@ -193,7 +190,6 @@ class SettingsCommands(commands.Cog):
                     inline=False
                 )
                 await ctx.send(embed=embed)
-
 
     @commands.command(name="quote")
     async def quote(self, ctx, *args):
@@ -216,6 +212,16 @@ class SettingsCommands(commands.Cog):
             else:
                 res = db.get_all_message_id(self.bot.init_db, channel_id, 40)
 
+        if res is None:
+            await ctx.send(embed=discord.Embed(
+                title="🤖 Biboop, I love stats ! Mayday ! There is a problem Jackson ! ☠",
+                color=utils.COLOR
+            ).add_field(
+                name="Quote commands !",
+                value="📚 `s!quote [#channel]`\nThere is no message with 40 char or more",
+                inline=False
+            ))
+
         random_index = randint(0, len(res) - 1)
         random_id = res[random_index]['messageID']
 
@@ -231,7 +237,7 @@ class SettingsCommands(commands.Cog):
         )
         embed.add_field(
             name="📚 Out of context :",
-            value="In <#{}>'s channel, <@{}> send: ".format(channel_id, user_id),
+            value="In <#{}>'s channel, <@{}> sent: ".format(channel_id, user_id),
             inline=False
         )
         embed.add_field(
