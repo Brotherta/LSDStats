@@ -211,6 +211,7 @@ class SettingsCommands(commands.Cog):
                 return
             else:
                 res = db.get_all_message_id(self.bot.init_db, channel_id, 40)
+                print(res)
                 if res is None:
                     await ctx.send(embed=discord.Embed(
                         title="🤖 Biboop, I love stats ! Mayday ! There is a problem Jackson ! ☠",
