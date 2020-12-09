@@ -211,7 +211,6 @@ class SettingsCommands(commands.Cog):
                 return
             else:
                 res = db.get_all_message_id(self.bot.init_db, channel_id, 40)
-                print(len(res), "len(res) == 0", len(res) == 0)
                 if len(res) == 0:
                     print("yes wrong")
                     await ctx.send(embed=discord.Embed(
