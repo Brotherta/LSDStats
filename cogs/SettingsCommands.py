@@ -211,16 +211,16 @@ class SettingsCommands(commands.Cog):
                 return
             else:
                 res = db.get_all_message_id(self.bot.init_db, channel_id, 40)
-
-        if res is None:
-            await ctx.send(embed=discord.Embed(
-                title="🤖 Biboop, I love stats ! Mayday ! There is a problem Jackson ! ☠",
-                color=utils.COLOR
-            ).add_field(
-                name="Quote commands !",
-                value="📚 `s!quote [#channel]`\nThere is no message with 40 char or more",
-                inline=False
-            ))
+                if res is None:
+                    await ctx.send(embed=discord.Embed(
+                        title="🤖 Biboop, I love stats ! Mayday ! There is a problem Jackson ! ☠",
+                        color=utils.COLOR
+                    ).add_field(
+                        name="Quote commands !",
+                        value="📚 `s!quote [#channel]`\nThere is no message with 40 char or more",
+                        inline=False
+                    ))
+                    return
 
         random_index = randint(0, len(res) - 1)
         random_id = res[random_index]['messageID']
