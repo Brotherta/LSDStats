@@ -231,6 +231,9 @@ class SettingsCommands(commands.Cog):
         user_id = random_message['UserID']
         channel_id = random_message['channel']
         time = random_message['time']
+        guild_id = ctx.message.guild.id
+
+        link_message = "https://discord.com/channels/{}/{}/{}".format(guild_id, channel_id, random_id)
 
         embed = discord.Embed(
             title="🤖 Biboop, I love stats ! Here's my research...",
@@ -244,6 +247,11 @@ class SettingsCommands(commands.Cog):
         embed.add_field(
             name="📕 message :",
             value=message,
+            inline=False
+        )
+        embed.add_field(
+            name="📖 Context :",
+            value=link_message,
             inline=False
         )
         embed.set_footer(
