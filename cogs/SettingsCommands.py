@@ -50,19 +50,20 @@ class SettingsCommands(commands.Cog):
         await accept_decline.add_reaction("✅")
         await accept_decline.add_reaction("❌")
 
+    @commands.is_owner()
     @commands.command(name="strip")
     async def strip_channels(self, ctx):
         accepts_list = db.get_all_user_id_accepts(self.bot.init_db)
-        random_dumb = random.randint(0, len(accepts_list) - 1)
+        print("strip !")
         channel = ctx.channel
-        messages = await channel.history(limit=1000).flatten()
+        messages = await channel.history(limit=20000).flatten()
+        print("strip ! len : ", len(messages))
         acc = 0
         for message in messages:
             if str(message.author.id) in accepts_list:
                 db.insert_message_in_table(message, self.bot.init_db)
                 acc += 1
-        await ctx.send("J\'ai pu lire {} de vos messages ! "
-                       "Vous en dites des bêtises...\nSurtout toi <@{}> !".format(acc, accepts_list[random_dumb]))
+
 
     @commands.command(name="count")
     async def count(self, ctx, *args):
