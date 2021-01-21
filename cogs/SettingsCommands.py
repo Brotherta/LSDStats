@@ -55,14 +55,16 @@ class SettingsCommands(commands.Cog):
     async def strip_channels(self, ctx):
         accepts_list = db.get_all_user_id_accepts(self.bot.init_db)
         print("strip !")
-        channel = ctx.channel
-        messages = await channel.history(limit=20000).flatten()
-        print("strip ! len : ", len(messages))
-        acc = 0
-        for message in messages:
-            if str(message.author.id) in accepts_list:
-                db.insert_message_in_table(message, self.bot.init_db)
-                acc += 1
+        for channel in ctx.guild.text_channels:
+            print("strip", channel.name)
+            messages = await channel.history(limit=500).flatten()
+            print("strip ! len : ", len(messages))
+            acc = 0
+            for message in messages:
+                if str(message.author.id) in accepts_list:
+                    db.insert_message_in_table(message, self.bot.init_db)
+                    acc += 1
+            print('channel', channel, 'terminate')
 
 
     @commands.command(name="count")
