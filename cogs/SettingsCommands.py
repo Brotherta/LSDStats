@@ -57,7 +57,7 @@ class SettingsCommands(commands.Cog):
         print("strip !")
         for channel in ctx.guild.text_channels:
             print("strip", channel.name)
-            messages = await channel.history().flatten()
+            messages = await channel.history(limit=None).flatten()
             print("strip ! len : ", len(messages))
             acc = 0
             for message in messages:
