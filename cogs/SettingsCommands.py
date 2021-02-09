@@ -1,6 +1,4 @@
-import os
 import discord
-import random
 import math
 import logging
 
@@ -207,30 +205,81 @@ class SettingsCommands(commands.Cog):
             color=utils.COLOR
         )
         error_embed.add_field(
-            name="Quote commands !",
-            value="📚 `s!quote [#channel]`\nGive a sentence or a word out of his context\n\n\n\n",
+            name="Quote command !",
+            value="📚 `s!quote [#channel] [@user]`\nGive a sentence or a word out of its context\n\n\n\n",
             inline=False
         )
+
+        user_id = None
+        channel_id = None
+
         if len(args) == 0:
             res = db.get_all_message_id(self.bot.init_db, 0, 20)
         else:
-            channel_id = utils.channel_to_channel_id(args[0])
-            if channel_id == 0:
-                await ctx.send(embed=error_embed)
-                return
-            else:
-                res = db.get_all_message_id(self.bot.init_db, channel_id, 20)
+            for arg in args:
+                if arg[:2] == "<#" and arg[-1] == ">":
+                    channel_id = utils.channel_to_channel_id(arg)
+                    if channel_id == 0:
+                        await ctx.send(embed=error_embed)
+                        return
+                elif arg[:2] == "<@" and arg[-1] == ">":
+                    if arg[2] == '!':
+                        user_id = int(arg[3:len(arg) - 1])
+                    else:
+                        user_id = int(arg[2:len(arg) - 1])
+
+            if len(args) == 1:
+                # s'il n'y a qu'un channel en argument
+                if user_id is None:
+                    res = db.get_all_message_id(self.bot.init_db, channel_id, 20)
+                    if len(res) == 0:
+                        print("yes wrong channel only")
+                        await ctx.send(embed=discord.Embed(
+                            title="🤖 Biboop, I love stats ! Mayday ! There is a problem Jackson ! ☠",
+                            color=utils.COLOR
+                        ).add_field(
+                            name="Quote commands !",
+                            value="📚 `s!quote [#channel] [@user]`\nThere is no message with {} char or more".format(20),
+                            inline=False
+                        ))
+                        return
+                # s'il n'y a qu'un user en argument
+                elif channel_id is None:
+                    res = db.get_all_message_channel_user(self.bot.init_db, 0, user_id, 20)
+                    if len(res) == 0:
+                        print("yes wrong user only")
+                        await ctx.send(embed=discord.Embed(
+                            title="🤖 Biboop, I love stats ! Mayday ! There is a problem Jackson ! ☠",
+                            color=utils.COLOR
+                        ).add_field(
+                            name="Quote commands !",
+                            value="📚 `s!quote [#channel] [@user]`\nThere is no message from that user, or there is no "
+                                  "message with {} char or more".format(20),
+                            inline=False
+                        ))
+                        return
+                # si l'argument donné est erroné
+                else:
+                    await ctx.send(embed=error_embed)
+                    return
+            elif len(args) == 2:
+                res = db.get_all_message_channel_user(self.bot.init_db, channel_id, user_id, 20)
                 if len(res) == 0:
-                    print("yes wrong")
+                    print("yes wrong with 2 args")
                     await ctx.send(embed=discord.Embed(
                         title="🤖 Biboop, I love stats ! Mayday ! There is a problem Jackson ! ☠",
                         color=utils.COLOR
                     ).add_field(
                         name="Quote commands !",
-                        value="📚 `s!quote [#channel]`\nThere is no message with {} char or more".fomrat(20),
+                        value="📚 `s!quote [#channel] [@user]`\nYou gave me one or several wrong argument(s), or "
+                              " there is no message with {} char or more".format(20),
                         inline=False
                     ))
                     return
+            else:
+                print("trop d'arguments")
+                await ctx.send(embed=error_embed)
+                return
 
         random_index = randint(0, len(res) - 1)
         random_id = res[random_index]['messageID']

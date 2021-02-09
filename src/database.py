@@ -157,3 +157,24 @@ def get_content_message_id(connection, message_id):
             return res
     except Exception as e:
         logger.exception(e)
+
+
+def get_all_message_channel_user(connection, channel_id, user, limit):
+    if channel_id != 0:
+        channel_id_sql = "AND Channel like '%{}%'".format(channel_id)
+    else:
+        channel_id_sql = ""
+    if user != 0:
+        user_id_sql = "AND UserID={}".format(user)
+    else:
+        user_id_sql = ""
+    try:
+        sql = "SELECT messageID FROM messages WHERE LENGTH(message)>{} {} {};".format(limit, channel_id_sql, user_id_sql)
+        logger.info(sql)
+        with connection.cursor() as cur:
+            cur.execute(sql)
+            res = cur.fetchall()
+            return res
+    except Exception as e:
+        logger.exception(e)
+
