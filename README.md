@@ -1,3 +1,3 @@
 # LSDStats
 
-Bot discord for personal use. Watch servers and gives statistics about users messages.
+Bot discord for personal use. Watchs servers and gives statistics about users messages.
